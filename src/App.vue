@@ -129,13 +129,12 @@ const handleCloseSession = () => {
     transporter: transport.value,
     transportCodeQuantity: listItems.value.length,
   }
-  axios.post("http://localhost:3000/session-transport/create", data, {
+  axios.post("http://14.225.27.121/session-transport/create", data, {
     headers: {
       authorization: `Bearer ${token.value}`,
     },
   })
   .then((res) => {
-    console.log(res.data)
     handleReset()
     alert("Lưu phiên thành công")
   })
@@ -161,19 +160,19 @@ const handleAddItem = () => {
 const handleAuth = () => {
   if (email.value && password.value) {
     axios
-      .post('http://localhost:3000/login', {
+      .post('http://14.225.27.121/login', {
         email: email.value,
         password: password.value,
       })
       .then((res) => {
         if (res.data.token) {
           isAuth.value = true
-          console.log(res.data.token)
           localStorage.setItem("token", res.data.token);
+          token.value = res.data.token
         }
       })
       .catch((err) => {
-        errorMessage.value = err.response.data.message
+        errorMessage.value = err.response?.data?.message || err.message
         setTimeout(() => {
           errorMessage.value = ''
         }, 4000)
